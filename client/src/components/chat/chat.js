@@ -10,7 +10,7 @@ import OnlineUsers from '../onlineUsers/onlineUsers';
 
 let socket;
 
-const OuterContainer   = styled.div`
+const OuterContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,7 +18,7 @@ const OuterContainer   = styled.div`
   background-color: #1A1A1D;
 `;
 
-const Container    = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -46,12 +46,11 @@ const Chat = ({ location }) => {
     setRoom(room);
 
     socket.emit('join', {name, room}, (e) => {
-      console.log(e)
+
     });
 
     return () => {
       socket.emit('disconnect');
-
       socket.off();
     }
   }, [ENDPOINT, location.search]);
@@ -66,6 +65,11 @@ const Chat = ({ location }) => {
       setOnlineUsers(roomData.users);
     });
 
+    // !!!!!!!!!!!!
+    return () => {
+      socket.emit('disconnect');
+      socket.off();
+    }
   }, [messages, onlineUsers])
 
   //function for sending messages

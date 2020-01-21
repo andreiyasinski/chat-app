@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -23,7 +23,7 @@ const Heading = styled.h1`
   border-bottom: 2px solid white;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -54,19 +54,24 @@ const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
 
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    if (!name || !room) {
+      e.preventDefault(); 
+    } else {
+      history.push(`/chat?name=${name}&room=${room}`);
+    }
+  }
+
   return (
     <Container>
       <InnerContainer>
         <Heading>Join</Heading>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <JoinInput placeholder="Name" type="text" onChange={(e) => setName(e.target.value)} />
           <JoinInput placeholder="Room" type="text" onChange={(e) => setRoom(e.target.value)} />
-          <Link
-            onClick={e => (!name || !room) ? e.preventDefault() : null}
-            to={`/chat?name=${name}&room=${room}`}
-          >
-            <Button type="submit">Sign In</Button>
-          </Link>
+          <Button type="submit">Sign In</Button>
         </Form>
       </InnerContainer>
     </Container>
