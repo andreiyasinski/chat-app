@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
+import io from 'socket.io-client';
+
+let socket;
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -53,6 +57,7 @@ const Button = styled.button`
 const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const ENDPOINT = 'localhost:5000';
 
   const history = useHistory();
 
@@ -60,7 +65,14 @@ const Join = () => {
     if (!name || !room) {
       e.preventDefault(); 
     } else {
-      history.push(`/chat?name=${name}&room=${room}`);
+      e.preventDefault();
+      socket = io(ENDPOINT);
+      socket.emit('checkUserName', {name, room}, (e) => {
+        console.log(e)
+        if (!e) {
+          history.push(`/chat?name=${name}&room=${room}`)
+        }
+      });
     }
   }
 

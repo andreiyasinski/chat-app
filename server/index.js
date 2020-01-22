@@ -5,7 +5,7 @@ const http = require('http')
 const PORT = process.env.PORT || 5000;
 
 const router = require('./router');
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./users')
+const { addUser, removeUser, getUser, getUsersInRoom, checkUserName } = require('./users')
 
 const app = express();
 const server = http.createServer(app);
@@ -23,6 +23,14 @@ io.on('connection', (socket) => {
     socket.join(user.room);
 
     io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
+
+    callback();
+  });
+
+  socket.on('checkUserName', ({ name, room }, callback) => {
+    const { error } = checkUserName({ name, room });
+
+    if(error) return callback(error);
 
     callback();
   });
