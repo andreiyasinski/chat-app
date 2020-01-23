@@ -5,4 +5,8 @@ router.get('/', (req, res) => {
   res.send('server is up and running');
 });
 
+// router.get('/:name/:room', (req, res) => {
+//   res.send('');
+// });
+
 module.exports = router;

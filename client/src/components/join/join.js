@@ -68,7 +68,9 @@ const Join = () => {
       e.preventDefault();
       socket = io(ENDPOINT);
       socket.emit('checkUserName', {name, room}, (e) => {
-        console.log(e)
+        console.log(e);
+        socket.emit('dissconect');
+        socket.off();
         if (!e) {
           history.push(`/chat?name=${name}&room=${room}`)
         }
@@ -91,3 +93,10 @@ const Join = () => {
 }
 
 export default Join;
+
+// запрос на авторизацию вынести из сокетов в обычный ajax запрос
+// redux  стор сделать для мессаджей и онлайн юзеров
+// загрузка картинок и файлов
+// отображать картинки в чате
+// https://ru.wikipedia.org/wiki/Redis
+// рандомить картинку юзеру

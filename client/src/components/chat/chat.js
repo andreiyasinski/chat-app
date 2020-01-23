@@ -41,6 +41,7 @@ const Chat = ({ location }) => {
     const { name, room } = queryString.parse(location.search);
 
     socket = io(ENDPOINT);
+    console.log(socket, 'socket chat');
 
     setName(name);
     setRoom(room);
@@ -56,7 +57,7 @@ const Chat = ({ location }) => {
   }, [ENDPOINT, location.search]);
   
   useEffect(() => {
-    //console.log(messages)
+    // console.log(messages)
     socket.on('message', (message) => {
       setMessages([...messages, message ]);
     });
