@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-let socket;
+// let socket;
 
 const Container = styled.div`
   display: flex;
@@ -57,21 +58,18 @@ const Button = styled.button`
 const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const ENDPOINT = 'localhost:5000';
 
   const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (!name || !room) {
       e.preventDefault(); 
     } else {
       e.preventDefault();
-      socket = io(ENDPOINT);
-      socket.emit('checkUserName', {name, room}, (e) => {
-        console.log(e);
-        socket.emit('dissconect');
-        socket.off();
-        if (!e) {
+      axios.get(`http://localhost:5000/${name}/${room}`)
+      .then(res => {
+        console.log(res.data.error)
+        if (!res.data.error) {
           history.push(`/chat?name=${name}&room=${room}`)
         }
       });

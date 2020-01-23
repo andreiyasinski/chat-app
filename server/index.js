@@ -27,13 +27,13 @@ io.on('connection', (socket) => {
     callback();
   });
 
-  socket.on('checkUserName', ({ name, room }, callback) => {
-    const { error } = checkUserName({ name, room });
+  // socket.on('checkUserName', ({ name, room }, callback) => {
+  //   const { error } = checkUserName({ name, room });
 
-    if(error) return callback(error);
+  //   if(error) return callback(error);
 
-    callback();
-  });
+  //   callback();
+  // });
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
