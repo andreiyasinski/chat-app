@@ -36,9 +36,10 @@ const Form = styled.form`
 
 const JoinInput = styled.input`
   margin-bottom: 20px;
-  border-radius: 0;
+  border: none;
   padding: 15px 20px;
   width: 100%;
+  background: ${props => props.isValid ? "#fff" : "#ffc4c4"};
 `;
 
 const Button = styled.button`
@@ -58,12 +59,24 @@ const Button = styled.button`
 const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [isValid, setIsValid] = useState(true);
 
   const history = useHistory();
 
+  const handleName = (e) => {
+    setIsValid(true);
+    setName(e.target.value);
+  }
+
+  const handleRoom = (e) => {
+    setIsValid(true);
+    setRoom(e.target.value);
+  }
+
   const handleSubmit = async (e) => {
     if (!name || !room) {
-      e.preventDefault(); 
+      e.preventDefault();
+      setIsValid(false);
     } else {
       e.preventDefault();
       axios.get(`http://localhost:5000/${name}/${room}`)
@@ -71,7 +84,8 @@ const Join = () => {
         console.log(res.data.error)
         if (!res.data.error) {
           history.push(`/chat?name=${name}&room=${room}`)
-        }
+        };
+        setIsValid(false);
       });
     }
   }
@@ -81,8 +95,18 @@ const Join = () => {
       <InnerContainer>
         <Heading>Join</Heading>
         <Form onSubmit={handleSubmit}>
-          <JoinInput placeholder="Name" type="text" onChange={(e) => setName(e.target.value)} />
-          <JoinInput placeholder="Room" type="text" onChange={(e) => setRoom(e.target.value)} />
+          <JoinInput 
+            placeholder="Name"
+            type="text"
+            onChange={handleName}
+            isValid={isValid}
+          />
+          <JoinInput
+            placeholder="Room"
+            type="text"
+            onChange={handleRoom}
+            isValid={isValid}
+          />
           <Button type="submit">Sign In</Button>
         </Form>
       </InnerContainer>
@@ -93,7 +117,7 @@ const Join = () => {
 export default Join;
 
 // запрос на авторизацию вынести из сокетов в обычный ajax запрос
-// redux  стор сделать для мессаджей и онлайн юзеров
+// redux стор сделать для мессаджей и онлайн юзеров
 // загрузка картинок и файлов
 // отображать картинки в чате
 // https://ru.wikipedia.org/wiki/Redis
