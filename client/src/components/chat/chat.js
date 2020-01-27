@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 import styled from 'styled-components';
+
+import { getOnlineUsers } from '../../actions';
 
 import InfoBar from '../infoBar/infoBar';
 import Input from '../input/input';
@@ -29,19 +32,18 @@ const Container = styled.div`
   width: 40%;
 `;
 
-const Chat = ({ location }) => {
+const Chat = ({ location, getOnlineUsers, users }) => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  //const [onlineUsers, setOnlineUsers] = useState([]);
   const ENDPOINT = 'localhost:5000';
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
 
     socket = io(ENDPOINT);
-    console.log(socket, 'socket chat');
 
     setName(name);
     setRoom(room);
@@ -57,23 +59,19 @@ const Chat = ({ location }) => {
   }, [ENDPOINT, location.search]);
   
   useEffect(() => {
-    // console.log(messages)
     socket.on('message', (message) => {
       setMessages([...messages, message ]);
     });
 
     socket.on('roomData', (roomData) => {
-      setOnlineUsers(roomData.users);
+      getOnlineUsers(roomData.users);
     });
 
-    // !!!!!!!!!!!!
     return () => {
       socket.emit('disconnect');
       socket.off();
     }
-  }, [messages, onlineUsers])
-
-  //function for sending messages
+  }, [messages, getOnlineUsers, users])
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -90,9 +88,23 @@ const Chat = ({ location }) => {
         <Messages messages={messages} name={name} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
       </Container>
-      <OnlineUsers onlineUsers={onlineUsers} />
+      <OnlineUsers onlineUsers={users} />
     </OuterContainer>
   )
 }
 
-export default Chat;
+const mapStateToProps = (state) => {
+  return {
+    users: state.users,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getOnlineUsers: (users) => {
+      dispatch(getOnlineUsers(users))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

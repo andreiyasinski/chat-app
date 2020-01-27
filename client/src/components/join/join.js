@@ -81,11 +81,7 @@ const Join = () => {
       e.preventDefault();
       axios.get(`http://localhost:5000/${name}/${room}`)
       .then(res => {
-        console.log(res.data.error)
-        if (!res.data.error) {
-          history.push(`/chat?name=${name}&room=${room}`)
-        };
-        setIsValid(false);
+        !res.data.error ? history.push(`/chat?name=${name}&room=${room}`) : setIsValid(false);
       });
     }
   }
