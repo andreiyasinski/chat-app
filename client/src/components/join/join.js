@@ -56,38 +56,55 @@ const Button = styled.button`
   width: 100%;
 `;
 
+const Title = styled.p`
+  color: #90d1a7;
+  font-weight: 600;
+  font-family: Courier;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 14px;
+`;
+
 const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const [isValid, setIsValid] = useState(true);
+  const [isValidName, setIsValidName] = useState(true);
+  const [isValidRoom, setIsValidRoom] = useState(true);
 
   const history = useHistory();
 
   const handleName = (e) => {
-    setIsValid(true);
+    setIsValidName(true);
     setName(e.target.value);
   }
 
   const handleRoom = (e) => {
-    setIsValid(true);
+    setIsValidRoom(true);
     setRoom(e.target.value);
   }
 
   const handleSubmit = async (e) => {
     if (!name || !room) {
       e.preventDefault();
-      setIsValid(false);
+      if (!name) {
+        setIsValidName(false)
+      };
+      if (!room) {
+        setIsValidRoom(false);
+      };
     } else {
       e.preventDefault();
       axios.get(`http://localhost:5000/${name}/${room}`)
       .then(res => {
-        !res.data.error ? history.push(`/chat?name=${name}&room=${room}`) : setIsValid(false);
+        !res.data.error ? history.push(`/chat?name=${name}&room=${room}`) : setIsValidName(false);
       });
     }
   }
 
   return (
     <Container>
+      <Title>Wake up, Neo...</Title>
       <InnerContainer>
         <Heading>Join</Heading>
         <Form onSubmit={handleSubmit}>
@@ -95,13 +112,13 @@ const Join = () => {
             placeholder="Name"
             type="text"
             onChange={handleName}
-            isValid={isValid}
+            isValid={isValidName}
           />
           <JoinInput
             placeholder="Room"
             type="text"
             onChange={handleRoom}
-            isValid={isValid}
+            isValid={isValidRoom}
           />
           <Button type="submit">Sign In</Button>
         </Form>
@@ -112,8 +129,8 @@ const Join = () => {
 
 export default Join;
 
-// запрос на авторизацию вынести из сокетов в обычный ajax запрос
-// redux стор сделать для мессаджей и онлайн юзеров
+// запрос на авторизацию вынести из сокетов в обычный ajax запрос +++
+// redux стор сделать для мессаджей и онлайн юзеров +++
 // загрузка картинок и файлов
 // отображать картинки в чате
 // https://ru.wikipedia.org/wiki/Redis

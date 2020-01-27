@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 import styled from 'styled-components';
 
-import { getOnlineUsers } from '../../actions';
+import { getOnlineUsers, addMessage } from '../../actions';
 
 import InfoBar from '../infoBar/infoBar';
 import Input from '../input/input';
@@ -32,12 +32,10 @@ const Container = styled.div`
   width: 40%;
 `;
 
-const Chat = ({ location, getOnlineUsers, users }) => {
+const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  //const [onlineUsers, setOnlineUsers] = useState([]);
   const ENDPOINT = 'localhost:5000';
 
   useEffect(() => {
@@ -60,7 +58,8 @@ const Chat = ({ location, getOnlineUsers, users }) => {
   
   useEffect(() => {
     socket.on('message', (message) => {
-      setMessages([...messages, message ]);
+      //setMessages([...messages, message ]);
+      addMessage(message);
     });
 
     socket.on('roomData', (roomData) => {
@@ -71,7 +70,7 @@ const Chat = ({ location, getOnlineUsers, users }) => {
       socket.emit('disconnect');
       socket.off();
     }
-  }, [messages, getOnlineUsers, users])
+  }, [addMessage, getOnlineUsers])
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -96,6 +95,7 @@ const Chat = ({ location, getOnlineUsers, users }) => {
 const mapStateToProps = (state) => {
   return {
     users: state.users,
+    messages: state.messages
   }
 }
 
@@ -103,6 +103,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getOnlineUsers: (users) => {
       dispatch(getOnlineUsers(users))
+    },
+    addMessage: (message) => {
+      dispatch(addMessage(message))
     }
   }
 }

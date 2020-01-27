@@ -4,7 +4,7 @@ const messages = (state = [], action) => {
   switch (action.type) {
     case ADD_MESSAGE:
       return [
-        action.payload
+        ...state, action.payload
       ]
     default:
       return state

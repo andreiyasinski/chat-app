@@ -1,9 +1,9 @@
-export const ADD_USER = 'ADD_USER';
+export const GET_ONLINE_USERS = 'ADD_USER';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 export const getOnlineUsers = (users) => {
   return {
-    type: ADD_USER,
+    type: GET_ONLINE_USERS,
     payload: users
   }
 }
