@@ -13,6 +13,7 @@ import OnlineUsers from '../onlineUsers/onlineUsers';
 import addFileImg from '../../assets/paperclip.svg';
 
 let socket;
+let fileInput = React.createRef();
 
 const OuterContainer = styled.div`
   display: flex;
@@ -42,15 +43,21 @@ const AddInput = styled.input`
 `;
 
 const AddImage = styled.img`
-  height: 40px;
+  height: 32px;
   margin-top: 5px;
   cursor: pointer;
+`;
+
+const AttachedFile = styled.div`
+  padding: 5px 35px;
 `;
 
 const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageName, setSelectedImageName] = useState('');
   const ENDPOINT = 'localhost:5000';
 
   useEffect(() => {
@@ -93,18 +100,39 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
     if(message) {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
+    fileInput.current.value = '';
+    setSelectedImage(null);
   };
 
-  let fileInput = React.createRef();
+  const uploadImage = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    setSelectedImageName(file.name);
+
+    reader.onloadend = () => {
+      setSelectedImage(reader.result);
+    }
+    reader.readAsDataURL(file);
+  }
 
   return (
     <OuterContainer>
       <Container>
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
+        {selectedImage && <AttachedFile>{selectedImageName}</AttachedFile> }
         <InputWrapper>
-          <AddInput type="file" ref={fileInput} />
-          <AddImage onClick={() => fileInput.current.click()} src={addFileImg} alt="add file" />
+          <AddInput
+            onChange={e => uploadImage(e)}
+            type="file" ref={fileInput}
+            accept="image/jpeg,image/png"
+          />
+          <AddImage
+            onClick={() => fileInput.current.click()}
+            src={addFileImg}
+            alt="add file"
+          />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
         </InputWrapper>
       </Container>
