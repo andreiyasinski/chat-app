@@ -104,7 +104,7 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
         <Messages messages={messages} name={name} />
         <InputWrapper>
           <AddInput type="file" ref={fileInput} />
-          <AddImage onClick={e => fileInput.current.click()} src={addFileImg} style={{height: 40}} alt="add file" />
+          <AddImage onClick={() => fileInput.current.click()} src={addFileImg} alt="add file" />
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
         </InputWrapper>
       </Container>
