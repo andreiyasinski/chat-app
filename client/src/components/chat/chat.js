@@ -10,6 +10,7 @@ import InfoBar from '../infoBar/infoBar';
 import Input from '../input/input';
 import Messages from '../messages/messages';
 import OnlineUsers from '../onlineUsers/onlineUsers';
+import addFileImg from '../../assets/paperclip.svg';
 
 let socket;
 
@@ -30,6 +31,20 @@ const Container = styled.div`
   height: 60%;
   min-width: 300px;
   width: 40%;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+`;
+
+const AddInput = styled.input`
+  display: none;
+`;
+
+const AddImage = styled.img`
+  height: 40px;
+  margin-top: 5px;
+  cursor: pointer;
 `;
 
 const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
@@ -80,12 +95,18 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
     }
   };
 
+  let fileInput = React.createRef();
+
   return (
     <OuterContainer>
       <Container>
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+        <InputWrapper>
+          <AddInput type="file" ref={fileInput} />
+          <AddImage onClick={e => fileInput.current.click()} src={addFileImg} style={{height: 40}} alt="add file" />
+          <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+        </InputWrapper>
       </Container>
       <OnlineUsers onlineUsers={users} />
     </OuterContainer>
