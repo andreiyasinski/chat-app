@@ -11,6 +11,7 @@ import Input from '../input/input';
 import Messages from '../messages/messages';
 import OnlineUsers from '../onlineUsers/onlineUsers';
 import addFileImg from '../../assets/paperclip.svg';
+import closeIconBlack from '../../assets/close_icon_black.png';
 
 let socket;
 let fileInput = React.createRef();
@@ -36,6 +37,7 @@ const Container = styled.div`
 
 const InputWrapper = styled.div`
   display: flex;
+  border-top: 2px solid #D3D3D3;
 `;
 
 const AddInput = styled.input`
@@ -49,7 +51,25 @@ const AddImage = styled.img`
 `;
 
 const AttachedFile = styled.div`
+  display: flex;
+  align-items: center;
   padding: 5px 35px;
+  background: #e8e8e8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const DropFile = styled.img`
+  margin-right: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+`;
+
+const FileName = styled.p`
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
@@ -114,6 +134,11 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
       setSelectedImage(reader.result);
     }
     reader.readAsDataURL(file);
+  };
+
+  const dropFile = () => {
+    fileInput.current.value = '';
+    setSelectedImage(null);
   }
 
   return (
@@ -121,7 +146,7 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
       <Container>
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
-        {selectedImage && <AttachedFile>{selectedImageName}</AttachedFile> }
+        {selectedImage && <AttachedFile><DropFile onClick={dropFile} src={closeIconBlack} alt="close icon" /><FileName>{selectedImageName}</FileName></AttachedFile> }
         <InputWrapper>
           <AddInput
             onChange={e => uploadImage(e)}
@@ -133,7 +158,11 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
             src={addFileImg}
             alt="add file"
           />
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+          <Input
+            message={message}
+            setMessage={setMessage}
+            sendMessage={sendMessage}
+          />
         </InputWrapper>
       </Container>
       <OnlineUsers onlineUsers={users} />

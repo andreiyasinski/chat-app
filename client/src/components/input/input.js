@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const Form = styled.form`
   display: flex;
-  border-top: 2px solid #D3D3D3;
   width: 100%;
 `;
 
@@ -13,6 +12,7 @@ const InputArea = styled.input`
   padding: 15px;
   width: 80%;
   font-size: 1.2em;
+  outline: none;
 `;
 
 const SendButton  = styled.button`

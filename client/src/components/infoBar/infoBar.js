@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import onlineIcon from '../../icons/onlineIcon.png';
-import closeIcon from '../../icons/closeIcon.png';
+import onlineIcon from '../../assets/onlineIcon.png';
+import closeIcon from '../../assets/closeIcon.png';
 
 const Container = styled.div`
   display: flex;
