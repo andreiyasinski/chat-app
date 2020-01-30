@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactEmoji from 'react-emoji';
 
@@ -24,7 +24,7 @@ const MessageBox  = styled.div`
   color: white;
   display: inline-block;
   max-width: 80%;
-  background: ${props => props.backgroundBlue ? "#2979FF" : "#F3F3F3"};
+  background: ${props => props.backgroundBlue ? "#2979FF" : "#dedede"};
 `;
 
 const MessageText  = styled.p`
@@ -36,22 +36,29 @@ const MessageText  = styled.p`
   color: ${props => props.colorWhite ? "#fff" : "#353535"};
 `;
 
-const Message = ({ message: {user, text}, name }) => {
-  let isSentByCurrentUser = false;
+const Image = styled.img`
+  max-width: 100%;
+  max-height: 300px;
+`;
 
-  //const trimmedName = name.trim().toLowerCase();
-  const trimmedName = name.trim();
+const Message = ({ message: {user, text, image}, name }) => {
+  const [isSentByCurrentUser, setIsSentByCurrentUser] = useState(false);
 
-  if(user === trimmedName) {
-    isSentByCurrentUser = true;
-  }
+  useEffect(() => {
+    if(user === name.trim()) {
+      setIsSentByCurrentUser(true);
+    }
+  }, [setIsSentByCurrentUser, name, user])
 
   if (isSentByCurrentUser) {
     return (
       <MessageContainer justifyEnd>
-        <SentText pr10>{trimmedName}</SentText>
+        <SentText pr10>{name.trim()}</SentText>
         <MessageBox backgroundBlue>
-          <MessageText colorWhite>{ReactEmoji.emojify(text)}</MessageText>
+          <MessageText colorWhite>
+            {ReactEmoji.emojify(text)}
+          </MessageText>
+          {image && <Image src={image} alt="attached" />}
         </MessageBox>
       </MessageContainer>
     )
@@ -61,6 +68,7 @@ const Message = ({ message: {user, text}, name }) => {
     <MessageContainer>
       <MessageBox>
         <MessageText>{ReactEmoji.emojify(text)}</MessageText>
+        {image && <Image src={image} alt="attached" />}
       </MessageBox>
       <SentText>{user}</SentText>
     </MessageContainer>

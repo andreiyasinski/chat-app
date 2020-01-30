@@ -30,7 +30,7 @@ const Container = styled.div`
   justify-content: space-between;
   background: #FFFFFF;
   border-radius: 8px;
-  height: 60%;
+  height: 80%;
   min-width: 300px;
   width: 40%;
 `;
@@ -100,7 +100,6 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
   
   useEffect(() => {
     socket.on('message', (message) => {
-      //setMessages([...messages, message ]);
       addMessage(message);
     });
 
@@ -117,8 +116,8 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
   const sendMessage = (e) => {
     e.preventDefault();
 
-    if(message) {
-      socket.emit('sendMessage', message, () => setMessage(''));
+    if(message || selectedImage) {
+      socket.emit('sendMessage', {message, image: selectedImage}, () => setMessage(''));
     }
     fileInput.current.value = '';
     setSelectedImage(null);
@@ -146,7 +145,13 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
       <Container>
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
-        {selectedImage && <AttachedFile><DropFile onClick={dropFile} src={closeIconBlack} alt="close icon" /><FileName>{selectedImageName}</FileName></AttachedFile> }
+        {
+          selectedImage &&
+          <AttachedFile>
+            <DropFile onClick={dropFile} src={closeIconBlack} alt="close icon" />
+            <FileName>{selectedImageName}</FileName>
+          </AttachedFile>
+        }
         <InputWrapper>
           <AddInput
             onChange={e => uploadImage(e)}

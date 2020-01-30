@@ -12,8 +12,9 @@ export const addMessage = (message) => {
   return {
     type: ADD_MESSAGE,
     payload: {
+      user: message.user,
       text: message.text,
-      user: message.user
+      image: message.image
     }
   }
 }
