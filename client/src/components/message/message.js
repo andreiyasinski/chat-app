@@ -22,7 +22,8 @@ const MessageBox  = styled.div`
   border-radius: 20px;
   padding: 5px 20px;
   color: white;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   max-width: 80%;
   background: ${props => props.backgroundBlue ? "#2979FF" : "#dedede"};
 `;
@@ -37,6 +38,7 @@ const MessageText  = styled.p`
 `;
 
 const Image = styled.img`
+  align-items: center;
   max-width: 100%;
   max-height: 300px;
 `;
