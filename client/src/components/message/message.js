@@ -19,17 +19,18 @@ const SentText  = styled.p`
 `;
 
 const MessageBox  = styled.div`
+  display: flex;
+  flex-direction: column;
   border-radius: 20px;
   padding: 5px 20px;
   color: white;
-  display: flex;
-  flex-direction: column;
   max-width: 80%;
   background: ${props => props.backgroundBlue ? "#2979FF" : "#dedede"};
 `;
 
-const MessageText  = styled.p`
+const MessageText  = styled.div`
   width: 100%;
+  white-space: pre-wrap;
   letter-spacing: 0;
   float: left;
   font-size: 1.1em;
@@ -38,7 +39,7 @@ const MessageText  = styled.p`
 `;
 
 const Image = styled.img`
-  align-items: center;
+  align-self: center;
   max-width: 100%;
   max-height: 300px;
 `;
@@ -58,7 +59,7 @@ const Message = ({ message: {user, text, image}, name }) => {
         <SentText pr10>{name.trim()}</SentText>
         <MessageBox backgroundBlue>
           <MessageText colorWhite>
-            {ReactEmoji.emojify(text)}
+            {ReactEmoji.emojify(text.trim())}
           </MessageText>
           {image && <Image src={image} alt="attached" />}
         </MessageBox>
@@ -69,7 +70,7 @@ const Message = ({ message: {user, text, image}, name }) => {
   return (
     <MessageContainer>
       <MessageBox>
-        <MessageText>{ReactEmoji.emojify(text)}</MessageText>
+        <MessageText>{ReactEmoji.emojify(text.trim())}</MessageText>
         {image && <Image src={image} alt="attached" />}
       </MessageBox>
       <SentText>{user}</SentText>

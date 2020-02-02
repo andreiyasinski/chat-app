@@ -115,9 +115,9 @@ const Chat = ({ location, getOnlineUsers, users, addMessage, messages }) => {
 
   const sendMessage = (e) => {
     e.preventDefault();
-
-    if(message || selectedImage) {
-      socket.emit('sendMessage', {message, image: selectedImage}, () => setMessage(''));
+    
+    if(message.trim() || selectedImage) {
+      socket.emit('sendMessage', {message: message.trim(), image: selectedImage}, () => setMessage(''));
     }
     fileInput.current.value = '';
     setSelectedImage(null);
