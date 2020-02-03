@@ -33,7 +33,7 @@ const Input = ({ message, setMessage, sendMessage }) => {
       setMessage(e.target.value + `\n`)
     };
 
-    if (!e.shiftKey && e.key === 'Enter' ) {
+    if (e.key === 'Enter') {
       sendMessage(e);
     };
   }
