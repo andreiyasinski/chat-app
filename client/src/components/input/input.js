@@ -41,6 +41,7 @@ const Input = ({ message, setMessage, sendMessage }) => {
   return (
     <Form>
       <InputArea
+        autofocus="true"
         rows="2"
         placeholder="Type a message..."
         value={message}
