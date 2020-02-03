@@ -29,9 +29,13 @@ const SendButton  = styled.button`
 
 const Input = ({ message, setMessage, sendMessage }) => {
   const handlePress = e => {
+    if (e.charCode === 13 && e.ctrlKey) {
+      setMessage(e.target.value + `\n`)
+    };
+
     if (!e.shiftKey && e.key === 'Enter' ) {
       sendMessage(e);
-    }
+    };
   }
 
   return (
